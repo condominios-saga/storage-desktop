@@ -39,13 +39,13 @@ jobs:
     resource_class: macos.x86.medium.gen2
     steps:
       - install
-      - run: yarn workspace desktop run package --arch=<< parameters.arch >> --dry-run
+      - run: yarn make --arch=<< parameters.arch >> --dry-run
       - store_artifacts:
-          path: apps/desktop/out
+          path: out
       - persist_to_workspace:
           root: .
           paths:
-            - apps/desktop/out
+            - out
   win-build:
     parameters:
       arch:
@@ -56,13 +56,13 @@ jobs:
       shell: bash.exe
     steps:
       - install
-      - run: yarn workspace desktop run package --arch=<< parameters.arch >> --dry-run
+      - run: yarn make --arch=<< parameters.arch >> --dry-run
       - store_artifacts:
-          path: apps/desktop/out
+          path: out
       - persist_to_workspace:
           root: .
           paths:
-            - apps/desktop/out
+            - out
   linux-build:
     docker:
       - image: cimg/base:stable
@@ -73,13 +73,13 @@ jobs:
     steps:
       - run: sudo apt-get update && sudo apt install rpm
       - install
-      - run: yarn workspace desktop run package --arch=<< parameters.arch >> --dry-run
+      - run: yarn make --arch=<< parameters.arch >> --dry-run
       - store_artifacts:
-          path: apps/desktop/out
+          path: out
       - persist_to_workspace:
           root: .
           paths:
-            - apps/desktop/out
+            - out
 
   publish-to-github:
     docker:
