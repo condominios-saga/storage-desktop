@@ -14,7 +14,7 @@
     "electron": "^24.4.0"
   },
   "scripts": {
-    "dev": "electron index.js",
+    "dev": "set NODE_ENV=development& electron index.js",
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",

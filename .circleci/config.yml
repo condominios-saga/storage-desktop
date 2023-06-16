@@ -94,20 +94,21 @@ jobs:
 workflows:
   build:
     jobs:
-      - mac-build:
-          matrix:
-            parameters:
-              arch: [ x64, arm64 ]
+      #- mac-build:
+      #    matrix:
+      #      parameters:
+      #        arch: [ x64, arm64 ]
           
       - win-build:
           matrix:
             parameters:
-              arch: [ x64, ia32 ]
+              #arch: [ x64, ia32 ]
+              arch: [ ia32 ]
           
-      - linux-build:
-          matrix:
-            parameters:
-              arch: [ x64, arm64, armv7l ]          
+      #- linux-build:
+      #    matrix:
+      #      parameters:
+      #        arch: [ x64, arm64, armv7l ]          
 
       # - publish-to-github:
       #     context: fiddle-release

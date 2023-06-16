@@ -1,6 +1,6 @@
 const {updateAuthFile, getConfigData, login, existsAuthFile} = require('./lib/auth');
 const {startSync} = require('./lib/sync');
-const {app, BrowserWindow, ipcMain} = require('electron');
+const {app, BrowserWindow, ipcMain, screen} = require('electron');
 const {join} = require('path');
 
 async function initSync(mainWindow) {
@@ -10,12 +10,23 @@ async function initSync(mainWindow) {
 }
 
 const createWindow = async () => {
+  let display = screen.getPrimaryDisplay();
+  let width = display.bounds.width;
+
   const mainWindow = new BrowserWindow({
     width: 400,
     height: 600,
+    x: width - 400,
+    y: 0,
     resizable: false,
+    frame: false,
     webPreferences: {
       preload: join(__dirname, 'preload.js')
+    },
+    titleBarStyle: 'hidden',
+    titleBarOverlay: {
+      color: '#6c63ff',
+      symbolColor: '#fff'
     }
   });
 
