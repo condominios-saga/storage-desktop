@@ -4,10 +4,12 @@ const loginElement = document.getElementById('login');
 const dashboard = document.getElementById('dashboard');
 const storage = document.getElementById('storage');
 
+let actualStorage = 0;
+
 class Fetcher {
   constructor(token) {
     this.token = token;
-    this.endpoint = 'http://localhost:2020';
+    this.endpoint = 'https://saga-storage.onrender.com';
   }
   async _fetch(path, method = 'GET', data = {}) {
     const res = await  fetch(`${this.endpoint}${path}`, {
@@ -42,11 +44,11 @@ function toggleLogin(isLogged) {
 }
 
 function updateStorage(size) {
-  console.log(size);
+  actualStorage += size;
 
   const measurement = ['B', 'Kb', 'Mb', 'Gb', 'Tb'];
     
-  let finalSize = size;
+  let finalSize = actualStorage;
   let i = 0;
 
   while(finalSize >= 1024) {

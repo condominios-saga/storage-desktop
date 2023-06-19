@@ -41,11 +41,11 @@ jobs:
       - install
       - run: yarn make --arch=<< parameters.arch >> --dry-run
       - store_artifacts:
-          path: out
+          path: out/make
       - persist_to_workspace:
           root: .
           paths:
-            - out
+            - out/make
   win-build:
     parameters:
       arch:
@@ -58,11 +58,11 @@ jobs:
       - install
       - run: yarn make --arch=<< parameters.arch >> --dry-run
       - store_artifacts:
-          path: out
+          path: out/make
       - persist_to_workspace:
           root: .
           paths:
-            - out
+            - out/make
   linux-build:
     docker:
       - image: cimg/base:stable
@@ -75,11 +75,11 @@ jobs:
       - install
       - run: yarn make --arch=<< parameters.arch >> --dry-run
       - store_artifacts:
-          path: out
+          path: out/make
       - persist_to_workspace:
           root: .
           paths:
-            - out
+            - out/make
 
   publish-to-github:
     docker:

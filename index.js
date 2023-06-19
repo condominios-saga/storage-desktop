@@ -1,4 +1,5 @@
 const {updateAuthFile, getConfigData, login, existsAuthFile} = require('./lib/auth');
+const {serverHost} = require('./lib/constants');
 const {startSync} = require('./lib/sync');
 const {app, BrowserWindow, ipcMain, screen} = require('electron');
 const {join} = require('path');
@@ -29,6 +30,8 @@ const createWindow = async () => {
       symbolColor: '#fff'
     }
   });
+
+  ipcMain.handle('serverHost', () => serverHost);
 
   ipcMain.handle('isLogged', async () => {
     const {token} = await getConfigData();
