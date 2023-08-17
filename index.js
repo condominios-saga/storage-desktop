@@ -1,75 +1,65 @@
-const {updateAuthFile, getConfigData, login, existsAuthFile} = require('./lib/auth');
+const createMainWindow = require('./windows/main');
+const createTorrentWorker = require('./windows/webtorrent');
+const {updateAuthFile, getConfigData, login} = require('./lib/auth');
 const {serverHost} = require('./lib/constants');
-const {startSync} = require('./lib/sync');
 const {app, BrowserWindow, ipcMain, screen} = require('electron');
-const {join} = require('path');
+const {initSocket} = require('./lib/socket');
 
-async function initSync(mainWindow) {
-  const {socket} = await startSync();
-    
-  socket.on('storage:update', size => mainWindow.webContents.send('update-storage', size))
-}
-
-const createWindow = async () => {
-  let display = screen.getPrimaryDisplay();
-  let width = display.bounds.width;
-
-  const mainWindow = new BrowserWindow({
-    width: 400,
-    height: 600,
-    x: width - 400,
-    y: 0,
-    resizable: false,
-    frame: false,
-    webPreferences: {
-      preload: join(__dirname, 'preload.js')
-    },
-    titleBarStyle: 'hidden',
-    titleBarOverlay: {
-      color: '#6c63ff',
-      symbolColor: '#fff'
-    }
-  });
-
-  ipcMain.handle('serverHost', () => serverHost);
-
-  ipcMain.handle('isLogged', async () => {
-    const {token} = await getConfigData();
-
-    return token; 
-  });
-
-  ipcMain.handle('login', async (_, {email, password}) => {
-    try {
-      const data = await login(email, password);
-
-      if (!data)
-        return null;
-
-      await updateAuthFile(data);
-
-      initSync(mainWindow);
-
-      return data.token;
-    } catch(err) {
-      return null;
-    }
-  });
-
+async function handleIsLogged() {
   const {token} = await getConfigData();
 
-  if (token)
-    initSync(mainWindow);
+  return token; 
+}
 
-  mainWindow.loadFile(join(__dirname, 'static/index.html'));
+async function init(mainWindow) {
+  const {token} = await getConfigData();
+
+  if (!token)
+    return;
+
+  createTorrentWorker();  
+
+  const socket = initSocket(token);
+
+  socket
+    .on('storage:update', size => mainWindow.webContents.send('update-storage', size));
+}
+
+const getHandler = mainWindow =>  async function handleLogin(_, {email, password}) {
+  try {
+    const data = await login(email, password);
+
+    if (!data)
+      return null;
+
+    await updateAuthFile(data);
+
+    init(mainWindow);
+
+    return data.token;
+  } catch(err) {
+    return null;
+  }
+}
+
+const initWindows = async () => {
+  const mainWindow = createMainWindow();
+
+  const handleLogin = getHandler(mainWindow);
+
+  ipcMain.handle('serverHost', () => serverHost);
+  ipcMain.handle('isLogged', handleIsLogged);
+  ipcMain.handle('login', handleLogin);
+
+  init(mainWindow);
 }
 
 app.whenReady().then(() => {
-  createWindow();
+  initWindows();
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().lenght === 0)
-      createWindow();
+      initWindows();
   });
 });
 

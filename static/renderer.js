@@ -1,9 +1,8 @@
-window._fetcher = null;
-
 const loginElement = document.getElementById('login');
 const dashboard = document.getElementById('dashboard');
 const storage = document.getElementById('storage');
 
+let fetcher = null;
 let actualStorage = 0;
 
 class Fetcher {
@@ -68,20 +67,30 @@ async function login() {
   if (!token) //Add message on UI
     return alert('Credenciales invalidas');
 
+
+  fetcher = new Fetcher(token);
+  
+  const storageSize = await fetcher.getStorage();
+  
+  updateStorage(storageSize);
   toggleLogin(true);
 
-  window._fetcher = new Fetcher(token);
+  utils.onUpdateStorage((e, size) => updateStorage(size));
+
 }
 
 async function init() {
   const token = await utils.isLogged();
-  window._fetcher = fetcher = new Fetcher(token);
 
+  if (!token)
+    return;
+  
+  fetcher = new Fetcher(token);
+  
   const storageSize = await fetcher.getStorage();
-
-  updateStorage(storageSize);
-
-  toggleLogin(token);
+  updateStorage(storageSize);  
+  
+  toggleLogin(true);
 
   utils.onUpdateStorage((e, size) => updateStorage(size));
 }
