@@ -1,9 +1,12 @@
 const createMainWindow = require('./windows/main');
 const createTorrentWorker = require('./windows/webtorrent');
 const {updateAuthFile, getConfigData, login} = require('./lib/auth');
-const {serverHost} = require('./lib/constants');
+const {serverHost, crashDumpsDir} = require('./lib/constants');
 const {app, BrowserWindow, ipcMain, screen} = require('electron');
 const {initSocket} = require('./lib/socket');
+
+let torrentWorker = null;
+app.setPath('crashDumps', crashDumpsDir);
 
 async function handleIsLogged() {
   const {token} = await getConfigData();
@@ -17,7 +20,16 @@ async function init(mainWindow) {
   if (!token)
     return;
 
-  createTorrentWorker();  
+  let initTorrent = () => {
+    torrentWorker = createTorrentWorker();
+
+    torrentWorker.webContents.on("crashed", () => {
+      //Reinit torrent on Crash
+      initTorrent()
+    });
+  }
+
+  initTorrent();
 
   const socket = initSocket(token);
 

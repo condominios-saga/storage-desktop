@@ -11,7 +11,7 @@ const createWindow = () => {
     maximizable: false,
     minimizable: false,
     resizable: false,
-    show: false,
+    show: true,
     skipTaskbar: true,
     title: 'webtorrent-client',
     useContentSize: true,
