@@ -15,7 +15,7 @@
     "eslint": "^8.47.0"
   },
   "scripts": {
-    "dev": "electron index.js --enable-logging",
+    "dev": "electron index.js",
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",

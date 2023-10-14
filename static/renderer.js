@@ -8,7 +8,8 @@ let actualStorage = 0;
 class Fetcher {
   constructor(token) {
     this.token = token;
-    this.endpoint = 'https://saga-storage.onrender.com';
+    //this.endpoint = 'https://saga-storage.onrender.com';
+    this.endpoint = 'http://localhost:3030';
   }
   async _fetch(path, method = 'GET', data = {}) {
     const res = await  fetch(`${this.endpoint}${path}`, {
@@ -26,7 +27,7 @@ class Fetcher {
   }
 
   async getStorage() {
-    const {storageSize} = await this._fetch('/bucket', 'GET');
+    const {storageSize} = await this._fetch('/storage', 'GET');
 
     return storageSize;
   }

@@ -23,7 +23,8 @@ async function init(mainWindow) {
   let initTorrent = () => {
     torrentWorker = createTorrentWorker();
 
-    torrentWorker.webContents.on("crashed", () => {
+    torrentWorker.webContents.on("crashed", err => {
+      console.log('err', err)
       //Reinit torrent on Crash
       initTorrent()
     });
