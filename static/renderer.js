@@ -8,8 +8,8 @@ let actualStorage = 0;
 class Fetcher {
   constructor(token) {
     this.token = token;
-    //this.endpoint = 'https://saga-storage.onrender.com';
-    this.endpoint = 'http://localhost:3030';
+    this.endpoint = 'https://sagacondominios.onrender.com';
+    //this.endpoint = 'http://localhost:3030';
   }
   async _fetch(path, method = 'GET', data = {}) {
     const res = await  fetch(`${this.endpoint}${path}`, {
