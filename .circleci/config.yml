@@ -57,7 +57,7 @@ jobs:
     steps:
       - install
       - run: yarn make --platform win32 --out=dist --arch=<< parameters.arch >>
-      - run: yarn make --src dist/app-win32-<< parameters.arch >> --dest dist/installers
+      - run: yarn setup --src dist/app-win32-<< parameters.arch >> --dest dist/installers
       - store_artifacts:
           path: dist/installers
       - persist_to_workspace:
