@@ -1,5 +1,10 @@
 module.exports = {
-  packagerConfig: {},
+  packagerConfig: {
+    assar: true
+  },
+  winstallerConfig: {
+    name: "OpenChat"
+  },
   rebuildConfig: {},
   publishers: [
     {
@@ -20,9 +25,8 @@ module.exports = {
       config: {
         name: 'saga-storage',
         authors: "David's Devel",
-        iconUrl:
-          'https://raw.githubusercontent.com/electron/fiddle/0119f0ce697f5ff7dec4fe51f17620c78cfd488b/assets/icons/fiddle.ico',
-        noMsi: true
+        iconUrl: 'https://raw.githubusercontent.com/electron/fiddle/0119f0ce697f5ff7dec4fe51f17620c78cfd488b/assets/icons/fiddle.ico',
+        setupMsi: 'Desktop.msi'
       }
     },
     {
