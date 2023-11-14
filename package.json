@@ -1,28 +1,23 @@
 {
-  "name": "desktop",
+  "name": "app",
   "description": "App Cloud Sync service",
   "version": "0.0.1",
   "main": "index.js",
   "license": "MIT",
   "devDependencies": {
-    "@electron-forge/cli": "^6.1.1",
-    "@electron-forge/maker-deb": "^6.1.1",
-    "@electron-forge/maker-rpm": "^6.1.1",
-    "@electron-forge/maker-squirrel": "^6.1.1",
-    "@electron-forge/maker-zip": "^6.1.1",
-    "@electron-forge/publisher-github": "^6.1.1",
     "electron": "^24.4.0",
+    "electron-installer-windows": "^3.0.0",
+    "electron-packager": "^17.1.2",
     "eslint": "^8.47.0"
   },
   "scripts": {
     "dev": "electron index.js",
-    "start": "electron-forge start",
-    "package": "electron-forge package",
-    "make": "electron-forge make",
-    "publish": "electron-forge publish"
+    "make": "electron-packager . app",
+    "setup": "electron-installer-windows"
   },
+  "author": "David's Devel <davidsdevel@gmail.com>",
   "dependencies": {
-    "axios": "^1.4.0",
+    "axios": "^1.6.2",
     "chokidar": "^3.5.3",
     "electron-squirrel-startup": "^1.0.0",
     "import": "^0.0.6",
